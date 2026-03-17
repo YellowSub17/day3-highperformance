@@ -1,30 +1,62 @@
 # Program to multiply two matrices using nested loops
 import random
+import numpy as np
 
-N = 250
 
-# NxN matrix
-X = []
-for i in range(N):
-    X.append([random.randint(0,100) for r in range(N)])
+@profile
+def slow_matmul(N=256, X=None, Y=None):
 
-# Nx(N+1) matrix
-Y = []
-for i in range(N):
-    Y.append([random.randint(0,100) for r in range(N+1)])
+    # NxN matrix
+    if X is None:
+        X = []
+        for i in range(N):
+            X.append([random.randint(0,100) for r in range(N)])
 
-# result is Nx(N+1)
-result = []
-for i in range(N):
-    result.append([0] * (N+1))
+    # Nx(N+1) matrix
+    if Y is None:
+        Y = []
+        for i in range(N):
+            Y.append([random.randint(0,100) for r in range(N+1)])
 
-# iterate through rows of X
-for i in range(len(X)):
-    # iterate through columns of Y
-    for j in range(len(Y[0])):
-        # iterate through rows of Y
-        for k in range(len(Y)):
-            result[i][j] += X[i][k] * Y[k][j]
+    # result is Nx(N+1)
+    result = []
+    for i in range(N):
+        result.append([0] * (N+1))
 
-for r in result:
-    print(r)
+
+    # iterate through rows of X
+    for i in range(len(X)):
+        # iterate through columns of Y
+        for j in range(len(Y[0])):
+            # iterate through rows of Y
+            for k in range(len(Y)):
+                result[i][j] += X[i][k] * Y[k][j]
+
+    for r in result:
+        print(r)
+
+@profile
+def fast_matmul(N=256, X=None, Y=None):
+
+    # NxN matrix
+
+    if X is None:
+        X = np.random.randint( 0, 100, (N,N))
+
+    # Nx(N+1) matrix
+
+    if Y is None:
+        Y = np.random.randint( 0, 101, (N,N))
+
+
+    result = np.matmul(X,Y)
+    print(result)
+
+
+if __name__=='__main__':
+
+    slow_matmul()
+
+    fast_matmul()
+
+
